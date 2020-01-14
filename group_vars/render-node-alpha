@@ -1,0 +1,3 @@
+apps:
+  - name: render-node-alpha
+    path: /data/log/rendernode/rendernode.log

@@ -1,0 +1,17 @@
+- name: makesure RedHat
+  fail: msg="This script is only applicable to RedHat"
+  when: ansible_os_family != "RedHat"
+- name: sync time
+  shell: ntpdate time.windows.com
+- name: install epel repo
+  yum: name=epel-release state=present
+- name: stop firewalld
+  service: name=firewalld state=stopped
+- name: stop selinux
+  shell: sed -i '/SELINUX/s/enforcing/disabled/' /etc/selinux/config
+- name: download and install elastic GPG key
+  rpm_key:
+    state=present
+    key=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+- name: install es repo
+  copy: src=elk.repo dest=/etc/yum.repos.d/elk.repo

@@ -1,0 +1,37 @@
+input {
+{% for item in apps %}
+
+    redis {
+        host => "{{ redishost }}"
+        port => 6379
+        password => "{{ redispassword }}"
+        db => "{{ alpha_db }}"
+        data_type => "list"
+        key => "{{ item }}"
+    }
+
+{% endfor %}
+
+}
+filter {
+  grok{
+      match => { "host" => "%{IPV4:client}" }
+      remove_field => [ "ecs" ]
+      remove_field => [ "host" ]
+    } 
+
+}
+
+output {
+{% for item in apps %}
+
+    if [tags][0] == "{{ item }}" {
+        elasticsearch {
+            hosts  => ["http://{{ es_nodes.node1 }}:9200","http://{{ es_nodes.node2 }}:9200","http://{{ es_nodes.node3 }}:9200"]
+            index  => "{{ item }}-%{+YYYY.MM.dd}"
+        }
+    }
+
+{% endfor %}
+
+}

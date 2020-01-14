@@ -1,0 +1,5 @@
+#ansible-playbook -i ./invertories/hosts --extra-vars "host=render-node-alpha" filebeat.yml
+- hosts: "{{ host | default('render-tools-alpha')}}"
+  roles:
+  - common
+  - filebeat

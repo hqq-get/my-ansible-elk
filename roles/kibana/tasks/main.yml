@@ -1,0 +1,7 @@
+- name: install kibana
+  yum: name=kibana state=latest enablerepo=elasticsearch
+- name: config kibana
+  template: src=kibana.yml.j2 dest=/etc/kibana/kibana.yml
+  notify: restart kibana
+- name: start kibana
+  service: name=kibana state=started

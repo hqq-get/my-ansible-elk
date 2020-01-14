@@ -1,0 +1,15 @@
+- name: install redis
+  yum: name=redis state=present
+- name: copy redis conf
+  template: src=redis.conf.j2 dest=/etc/redis.conf
+  notify: 
+  - restart redis
+- name: start redis
+  service: name=redis state=started
+- name: validate that elasticsearch is up and available
+  shell: sleep 10 && netstat -lnupt | grep 6379| wc -l 
+  register: result
+- name: check port
+  fail: msg="redis start failed"
+  when: result.stdout == "0"
+  

@@ -1,0 +1,11 @@
+redispassword : "EGZPy0EfjcDhGNbIi"
+redishost: "192.168.159.34"
+alpha_db: "3"
+es_nodes:
+  node1: 192.168.159.30
+  node2: 192.168.159.31
+  node3: 192.168.159.32
+apps:
+  - renderpackageservice-alpha
+  - render-node-alpha
+  - render-node-service-alpha

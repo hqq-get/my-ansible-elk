@@ -1,0 +1,29 @@
+filebeat.inputs:
+{% for item in apps %}
+
+- type: log
+  paths:
+   - {{ item.path }}
+  tags: ["{{ item.name }}"]
+  multiline:
+      pattern: '^\['
+      negate: true
+      match: after
+
+{% endfor %}
+
+processors:
+- add_host_metadata:
+    netinfo.enabled: true
+
+output.redis:
+  hosts: ["{{ redishost }}"]
+  password: "{{ redispassword }}"
+  db: {{ alpha_db }}
+  datatype: list
+  keys:
+{% for item in apps %}
+    - key: "{{ item.name }}"
+      when.contains:
+        tags: "{{ item.name }}"
+{% endfor %}

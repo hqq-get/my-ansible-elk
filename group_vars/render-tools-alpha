@@ -1,0 +1,7 @@
+---
+
+apps:
+  - name: renderpackageservice-alpha
+    path: /data/log/renderPackageService/renderPackageService.log
+  - name: render-node-service-alpha
+    path: /data/log/render-node-service/render-node-service-alpha.log

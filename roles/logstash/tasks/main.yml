@@ -1,0 +1,11 @@
+- name: install logstash
+  yum: name=logstash state=latest enablerepo=elasticsearch
+- name: Modify environment variables
+  shell: grep "^source /etc/profile" /usr/share/logstash/bin/logstash.lib.sh || sed -i '1i\source /etc/profile' /usr/share/logstash/bin/logstash.lib.sh
+- name: config logstash
+  template: src=my_elk.conf.j2 dest=/etc/logstash/conf.d/my_elk.conf
+  notify: restart logstash
+- name: create systemd for logstash
+  shell: source /etc/profile && /usr/share/logstash/bin/system-install /etc/logstash/startup.options systemd 
+- name: start logstash
+  service: name=logstash state=started
